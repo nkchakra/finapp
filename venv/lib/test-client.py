@@ -4,7 +4,7 @@ import json
 
 
 async def connectAndSend(msg='default'):
-    async with ws.connect('ws://localhost:5555') as websocket:
+    async with ws.connect('ws://50.18.144.216:5000') as websocket:
 
         await websocket.send(msg)
 

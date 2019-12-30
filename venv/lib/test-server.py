@@ -7,6 +7,9 @@ from threading import Thread, ThreadError
 from multiprocessing.pool import ThreadPool
 
 COUNT = 0
+hostname = '0.0.0.0'
+portno = 5000
+
 
 async def process_request(websocket,path):
     request = await websocket.recv()
@@ -24,7 +27,7 @@ def threaded_request(request):
         print(e)
         return json.dumps({'result': 'failure'})
 def main():
-    server = ws.serve(process_request, 'localhost',5555)
+    server = ws.serve(process_request, hostname,portno)
     asyncio.get_event_loop().run_until_complete(server)
     asyncio.get_event_loop().run_forever()
 
