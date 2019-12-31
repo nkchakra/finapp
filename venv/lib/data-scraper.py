@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from threading import Thread, ThreadError
 import queue
 import time, datetime
-from threading import Timer
+import schedule
 import os,sys
 
 
@@ -31,7 +31,7 @@ def get_co_data(ticker):
     try:
         response = urlopen(api_url.replace(SALT,ticker))
         return json.loads(response.read().decode("utf-8"))
-    except Exception(e):
+    except Exception as e:
         print('failed on ticker '+ticker)
         print(e)
         return {'symbol':'FAILURE on '+ticker}
@@ -75,7 +75,7 @@ def obtain_current_500():
         if (idx+1)%2==0:
             stritem = str(item)
             tickers.append(stritem[stritem.find('>')+1:stritem.find('</')])
-        if(len(tickers)>=10):
+        if(len(tickers)>=500):
             break
     return tickers
 
@@ -88,7 +88,7 @@ def write_data():
         f.write(json.dumps(ticker_data))
         f.close()
 
-    except Exception(e):
+    except Exception as e:
         print(e)
         f = open(error_log_folder+timestr+'.log','w+')
         f.write("failure at time: "+timestr)
@@ -96,12 +96,11 @@ def write_data():
         f.close()
 
 def main():
+    schedule.every().day.at('00:00').do(write_data)
+    while True:
+        schedule.run_pending()
+        time.sleep(300)
 
-    x = datetime.datetime.today()
-    y= x.replace(day=x.day, hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1)
-    delta_seconds = (y-x).seconds +1
-    t = Timer(delta_seconds,write_data)
-    t.start()
 
 
 if __name__=='__main__':
