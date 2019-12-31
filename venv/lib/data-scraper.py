@@ -129,11 +129,12 @@ def write_data():
         f.close()
 
 def main():
-    schedule.every().day.at('00:00').do(write_data)
+    schedule.every().day.do(write_data)
     while True:
         schedule.run_pending()
-        time.sleep(300)
+        time.sleep(30)
 
+    # write_data()
 
 if __name__=='__main__':
     main()
