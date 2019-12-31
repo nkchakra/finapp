@@ -98,7 +98,7 @@ def write_data():
 def main():
 
     x = datetime.datetime.today()
-    y= x.replace(day=x.day+1, hours=0)
+    y= x.replace(day=x.day, hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1)
     delta_seconds = (y-x).seconds +1
     t = Timer(delta_seconds,write_data)
     t.start()
