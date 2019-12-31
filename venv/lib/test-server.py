@@ -10,6 +10,7 @@ COUNT = 0
 hostname = '0.0.0.0'
 portno = 5000
 
+folder = 'sent_data/'
 
 async def process_request(websocket,path):
     request = await websocket.recv()
@@ -19,7 +20,7 @@ async def process_request(websocket,path):
 
 def threaded_request(request):
     try:
-        f = open(str(COUNT)+'.txt','w+')
+        f = open(folder+str(COUNT)+'.txt','w+')
         f.write(str(request))
         f.close()
         return json.dumps({'result':'success'})
